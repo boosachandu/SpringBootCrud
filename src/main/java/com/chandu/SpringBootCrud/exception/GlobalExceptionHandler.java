@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
             BookNotFoundException exception, WebRequest request){
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),request.getDescription(false));
 
-        return new ResponseEntity(errorDetails, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(APIException.class)
@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
             APIException exception, WebRequest request){
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),request.getDescription(false));
 
-        return new ResponseEntity(errorDetails, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     //Global exception
@@ -36,6 +36,6 @@ public class GlobalExceptionHandler {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
                 request.getDescription(false));
 
-        return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
