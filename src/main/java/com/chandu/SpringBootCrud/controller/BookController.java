@@ -1,47 +1,59 @@
 package com.chandu.SpringBootCrud.controller;
 
-import com.chandu.SpringBootCrud.dao.BookRepository;
 import com.chandu.SpringBootCrud.exception.BookNotFoundException;
 import com.chandu.SpringBootCrud.model.Book;
+import com.chandu.SpringBootCrud.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/books")
 public class BookController {
 
     @Autowired
-    private BookRepository bookRepository;
+    private BookService bookService;
 
     @GetMapping("/{id}")
     public Book getBook(@PathVariable String id){
 
-        return bookRepository.findById(Long.valueOf(id)).orElseThrow(
+        return bookService.getBook(Long.valueOf(id)).orElseThrow(
                 () -> new BookNotFoundException("Book Not Found with Id : "+id));
     }
 
     @GetMapping
     public List<Book> getBooks(){
-         return bookRepository.findAll();
+         return bookService.getBooks();
     }
 
     @PostMapping
     public Book saveBook(@RequestBody Book book){
-       return bookRepository.save(book);
+       return bookService.saveBook(book);
     }
 
     @PutMapping
     public Book updateBook(@RequestBody Book book){
-       return bookRepository.save(book);
+       return bookService.updateBook(book);
     }
 
     @DeleteMapping
     public void deleteBook(@RequestBody Book book){
-        bookRepository.delete(book);
+        bookService.deleteBook(book);
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteBook(@PathVariable String id){
+        bookService.deleteBook(Long.valueOf(id));
+    }
+
+   /* @GetMapping("/byName/{name}")
+    public List<Book> getBookByName(@PathVariable String name){
+        return bookService.getBooks(name);
+    }*/
+
+    @GetMapping("/byName")
+    public List<Book> getBookByName(@RequestParam String name){
+        return bookService.getBooks(name);
+    }
 }
