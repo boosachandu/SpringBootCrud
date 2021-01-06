@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class BookControllerTestWithJunit4 {
     private ObjectMapper objectMapper;
 
     @Test
+    @Disabled
    public void saveBook() throws Exception {
         Book book = new Book("C");
         book.setId(5L);
@@ -44,8 +46,10 @@ public class BookControllerTestWithJunit4 {
 
      String result =    mockMvc.perform(MockMvcRequestBuilders
                 .post("/books")
+             .contentType(MediaType.APPLICATION_JSON)
+             .characterEncoding("utf-8")
                 .content(asJsonString(book))
-                .contentType(MediaType.APPLICATION_JSON)
+                //.contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse().getContentAsString();
                 //.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(5)));

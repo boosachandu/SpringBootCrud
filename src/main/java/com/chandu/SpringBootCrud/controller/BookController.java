@@ -43,8 +43,9 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBook(@PathVariable String id){
+    public boolean deleteBook(@PathVariable String id){
         bookService.deleteBook(Long.valueOf(id));
+        return true;
     }
 
    /* @GetMapping("/byName/{name}")
