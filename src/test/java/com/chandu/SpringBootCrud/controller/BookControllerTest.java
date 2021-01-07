@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.Mockito.*;
+
 //RunWith(SpringRunner.class)
 //@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 //@RunWith(SpringJUnit4ClassRunner.class)
@@ -106,6 +108,7 @@ public class BookControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.equalTo("Python")));
     }
 
+    @DisplayName("Test for update the book details")
     @Test
     void updateBook() throws Exception {
         Book book = new Book("Python");
@@ -119,16 +122,29 @@ public class BookControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.equalTo("Python")));
     }
 
+    @DisplayName("Delete Book by id")
     @Test
     void deleteBook() throws Exception {
+        doNothing().when(bookService).deleteBook(1L);
         mockMvc.perform( MockMvcRequestBuilders.delete("/books/{id}", 1) )
                 .andExpect(MockMvcResultMatchers.status().isOk());
+        verify(bookService, times(1)).deleteBook(1L);
     }
 
+    @DisplayName("Delete Test For passing book instance")
     @Test
-    void testDeleteBook() {
+    void testDeleteBook() throws Exception {
+        Book book = new Book("Python");
+        book.setId(2L);
+        doNothing().when(bookService).deleteBook(book);
+        String json = objectMapper.writeValueAsString(book);
+        mockMvc.perform(MockMvcRequestBuilders.delete("/books")
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                .content(json).accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk());
+        verify(bookService, times(1)).deleteBook(book);
     }
 
+    @DisplayName("Delete book by name")
     @Test
     void getBookByName() throws Exception {
         Book book = new Book("Java");
